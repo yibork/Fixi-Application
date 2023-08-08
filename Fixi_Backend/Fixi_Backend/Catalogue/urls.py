@@ -1,10 +1,10 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import CatalogueViewSet
+from .views import ServiceViewSet,TaxonomyViewSet
 
-app_name = "Fixi_Backend"
+app_name = "Fixi_Backen.Catalogue"
 
 router = routers.DefaultRouter()
-router.register('catalogue', CatalogueViewSet, basename='catalogue')
-
+router.register('Services', ServiceViewSet, basename='Services')
+router.register('Taxonomies', TaxonomyViewSet, basename='Taxonomies')
 urlpatterns = router.urls

@@ -16,15 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import include
-from pictures.conf import get_settings
 
+from pictures.conf import get_settings
+app_name = "Fixi_Backend"
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("", include("Fixi_Backend.Catalogue.urls")),
 
 ]
-if get_settings().USE_PLACEHOLDERS:
-    urlpatterns += [
-        path("_pictures/", include("pictures.urls")),
-    ]
 

@@ -1,3 +1,14 @@
 from django.contrib import admin
+from .models import Service,Taxonomy,ServiceTaxonomy
+from treebeard.admin import TreeAdmin
+from treebeard.forms import movenodeform_factory
 
-# Register your models here.
+
+admin.site.register(Service)
+admin.site.register(ServiceTaxonomy)
+
+class MyAdmin(TreeAdmin):
+    form = movenodeform_factory(Taxonomy)
+
+
+admin.site.register(Taxonomy, MyAdmin)

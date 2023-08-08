@@ -1,11 +1,18 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Catalogue
-from .serializers import CatalogueSerializer
+from .models import Service,Taxonomy
+from .serializers import ServiceSerializer,TaxonomySerializer
 from django.db.models import Q
 
-class CatalogueViewSet(ModelViewSet):
-    serializer_class = CatalogueSerializer
+class ServiceViewSet(ModelViewSet):
+    serializer_class = ServiceSerializer
 
     def get_queryset(self):
         # Return the desired queryset here
-        return Catalogue.objects.all()
+        return Service.objects.all()
+
+class TaxonomyViewSet(ModelViewSet):
+    serializer_class = TaxonomySerializer
+
+    def get_queryset(self):
+        # Return the desired queryset here
+        return Taxonomy.objects.all()
