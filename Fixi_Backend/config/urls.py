@@ -52,10 +52,7 @@ if settings.DEBUG:
 
         urlpatterns = [path("__debug__/", include(debug_toolbar.urls))] + urlpatterns
 
-try:
-    if get_settings().USE_PLACEHOLDERS:
+if get_settings().USE_PLACEHOLDERS:
         urlpatterns += [
             path("_pictures/", include("pictures.urls")),
         ]
-except:
-    pass

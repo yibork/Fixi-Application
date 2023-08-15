@@ -11,7 +11,10 @@ class Service(AbstractBaseModel):
     price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
     image = PictureField(upload_to='service', blank=True)
     created_by = models.ForeignKey('users.User', on_delete=models.CASCADE,null=True, blank=True)
-
+    #discount = models.ForeignKey('Discount', on_delete=models.CASCADE, null=True, blank=True)
+    taxonomies = models.ManyToManyField('Taxonomy', through='ServiceTaxonomy', related_name='services')
+    def __str__(self):
+        return self.name
 class Taxonomy(MP_Node, AbstractBaseModel):
     name = models.CharField(max_length=100)
     node_order_by = ['name']

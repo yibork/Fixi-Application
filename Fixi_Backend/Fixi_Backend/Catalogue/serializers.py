@@ -1,12 +1,41 @@
 from rest_framework import serializers
-from .models import Service, Taxonomy
+from .models import Service, Taxonomy, ServiceTaxonomy
 
 from rest_framework import serializers
 
 class ServiceSerializer(serializers.ModelSerializer):
+    parent_taxonomies = serializers.SerializerMethodField()
+
     class Meta:
         model = Service
-        fields = ['id', 'name', 'description', 'price', 'image', 'created_by', 'slug']
+        fields = ['id', 'name', 'description', 'price', 'image', 'created_by', 'slug', 'parent_taxonomies']
+
+    def get_parent_taxonomies(self, obj):
+        service_taxonomies = ServiceTaxonomy.objects.filter(service=obj)
+        parent_taxonomies = []
+
+        for st in service_taxonomies:
+            parent_taxonomies.extend(self.get_all_parent_taxonomies(st.taxonomy))
+
+        if parent_taxonomies:
+            serializer = TaxonomySerializer(parent_taxonomies[0])  # Get the first element
+            return serializer.data
+
+        return None
+
+    def get_all_parent_taxonomies(self, taxonomy):
+        parent_taxonomies = []
+        while taxonomy:
+            parent_taxonomies.append(taxonomy)
+            taxonomy = taxonomy.get_parent()
+        return parent_taxonomies
+
+    def get_all_parent_taxonomies(self, taxonomy):
+        parent_taxonomies = []
+        while taxonomy:
+            parent_taxonomies.append(taxonomy)
+            taxonomy = taxonomy.get_parent()
+        return parent_taxonomies
 
 class TaxonomySerializer(serializers.ModelSerializer):
     parent = serializers.SerializerMethodField()
