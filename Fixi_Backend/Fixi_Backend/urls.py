@@ -21,7 +21,9 @@ from pictures.conf import get_settings
 app_name = "Fixi_Backend"
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("", include("Fixi_Backend.Catalogue.urls")),
-
+    path("reviews", include("Fixi_Backend.reviews.urls")),
+    path("service", include("Fixi_Backend.Catalogue.urls")),
+    path("basket", include("Fixi_Backend.basket.urls")),
+    path("users/", include("Fixi_Backend.users.urls", namespace="users")),
 ]
 

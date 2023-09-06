@@ -39,7 +39,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
 class TaxonomySerializer(serializers.ModelSerializer):
     parent = serializers.SerializerMethodField()
-#    discount = serializers.SerializerMethodField(method_name='get_discount')
+#    discount = serializers.py.SerializerMethodField(method_name='get_discount')
     class Meta:
         model = Taxonomy
         fields = [

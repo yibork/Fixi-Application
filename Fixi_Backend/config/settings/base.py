@@ -39,7 +39,8 @@ SECRET_KEY = 'z8q1(&_jk0zu#wc!$7#mkf6a$^3@69o87bf$b0-q#u3m%a30yq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['192.168.1.41']
+USE_X_FORWARDED_HOST = True
 
 # In settings.py
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -61,11 +62,23 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'pictures',
     'treebeard',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.facebook',
+    'allauth.socialaccount.providers.google',
+    'taggit',
+    'colorfield',
+    'django_filters',
 
 ]
 LOCAL_APPS =[
 "Fixi_Backend.Catalogue",
 "Fixi_Backend.users",
+"Fixi_Backend.authfixi",
+"Fixi_Backend.promotions",
+"Fixi_Backend.basket",
+"Fixi_Backend.orders",
+"Fixi_Backend.reviews",
+"Fixi_Backend.discount",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 MIDDLEWARE = [
@@ -187,3 +200,22 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+SOCIALACCOUNT_PROVIDERS = {
+    'facebook': {
+        'APP': {
+            'client_id': '753733306504277',
+            'secret': '7c82bfb42100067233f0ecbbc41fff5b',
+            'key': '',
+        }
+    }
+}
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': '1010540222711-e79iioq7ti2jr1665674f9ip7dm9d9vd.apps.googleusercontent.com',
+            'secret': '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',
+            'key': '',
+        }
+    }
+}

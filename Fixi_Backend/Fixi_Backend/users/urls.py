@@ -1,14 +1,16 @@
 from django.urls import path
+from rest_framework import routers
+from rest_framework_simplejwt.views import TokenRefreshView, TokenObtainPairView
 
-from Fixi_Backend.users.views import (
-    user_detail_view,
-    user_redirect_view,
-    user_update_view,
+from .views import (
+    LoginView,
 )
 
 app_name = "users"
+router = routers.DefaultRouter()
+
 urlpatterns = [
-    path("~redirect/", view=user_redirect_view, name="redirect"),
-    path("~update/", view=user_update_view, name="update"),
-    path("<str:username>/", view=user_detail_view, name="detail"),
+    path("refresh/",view = TokenRefreshView.as_view(), name="refresh"),
+    path("token/",view = TokenObtainPairView.as_view(), name="token"),
 ]
+urlpatterns += router.urls

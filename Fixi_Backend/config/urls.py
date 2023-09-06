@@ -4,6 +4,10 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import re_path
 from django.views import defaults as default_views
 from django.contrib import admin
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 
 # urls.py
@@ -16,6 +20,9 @@ urlpatterns = [
     path("api/v1/", include("config.api_router"), name="api"),
     path("users/", include("Fixi_Backend.users.urls", namespace="users")),
     path(settings.DJANGO_ADMIN_URL, admin.site.urls),
+    path('accounts/', include('allauth.urls')),
+                  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 
               ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:

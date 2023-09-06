@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h1>Your Basket</h1>
+
+  {% if object.items.count > 0 %}
+    <table>
+      <thead>
+        <tr>
+          <th>Product</th>
+          <th>Quantity</th>
+          <th>Price</th>
+          <th>Total Price</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for basket_item in object.items.all %}
+          <tr>
+            <td>{{ basket_item.item }}</td>
+            <td>{{ basket_item.quantity }}</td>
+            <td>{{ basket_item.item.get_price }} €</td>
+            <td>{{ basket_item.total_price }} €</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <h3>Total: {{ object.total_price }} €</h3>
+
+    {% if object.promo_code %}
+      <p>You applied the promo code: {{ object.promo_code.code }}</p>
+      <p>Your discount is: {{ object.promo_code.value }}</p>
+    {% endif %}
+
+    <a href="{% url 'basket:checkout' %}">Proceed to Checkout</a>
+
+  {% else %}
+    <p>Your basket is empty.</p>
+  {% endif %}
+{% endblock %}
