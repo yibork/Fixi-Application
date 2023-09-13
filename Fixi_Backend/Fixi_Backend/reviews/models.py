@@ -38,7 +38,6 @@ class ReviewCategory(AbstractBaseModel):
 
 class Review(AbstractBaseModel):
     user = models.ForeignKey('users.User', on_delete=models.SET_NULL, null=True, related_name="created_by")
-    service = models.ForeignKey('Catalogue.Service', on_delete=models.CASCADE, related_name='reviews')
     category = models.ForeignKey('ReviewCategory', on_delete=models.SET_NULL, null=True, related_name='reviews')
     votes = models.ManyToManyField('users.User', related_name='voters', blank=True, through="ReviewVotes")
     stars = models.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(5)])

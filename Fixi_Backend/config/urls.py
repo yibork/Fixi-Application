@@ -16,7 +16,11 @@ from pictures.conf import get_settings
 
 
 urlpatterns = [
-    path('api/v1/', include('Fixi_Backend.urls')),
+        path('admin/', admin.site.urls),
+        path('auth/', include('dj_rest_auth.urls')),
+        path('auth/registration/', include('dj_rest_auth.registration.urls')),
+
+                  path('api/v1/', include('Fixi_Backend.urls')),
     path("api/v1/", include("config.api_router"), name="api"),
     path("users/", include("Fixi_Backend.users.urls", namespace="users")),
     path(settings.DJANGO_ADMIN_URL, admin.site.urls),

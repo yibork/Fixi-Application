@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "Fixi_Backend"
 env = environ.Env()
 
+GDAL_LIBRARY_PATH = 'C:/Users/Yassine/Documents/gdal-3.7.1.tar/gdal-3.7.1'
+
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
     # OS environment variables take precedence over variables from .env
@@ -54,36 +56,43 @@ DJANGO_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+
 ]
 THIRD_PARTY_APPS = [
     'allauth',
     'allauth.account',
     'rest_framework',
     'rest_framework.authtoken',
+    'corsheaders',
     'pictures',
     'treebeard',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.facebook',
     'allauth.socialaccount.providers.google',
     'taggit',
+    'dj_rest_auth.registration',
     'colorfield',
     'django_filters',
+    "channels",
+    'django.contrib.gis',
 
 ]
 LOCAL_APPS =[
 "Fixi_Backend.Catalogue",
 "Fixi_Backend.users",
-"Fixi_Backend.authfixi",
 "Fixi_Backend.promotions",
 "Fixi_Backend.basket",
 "Fixi_Backend.orders",
 "Fixi_Backend.reviews",
-"Fixi_Backend.discount",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
+SITE_ID = 1
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -122,6 +131,16 @@ AUTH_USER_MODEL = "users.User"
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url
 LOGIN_URL = "account_login"
+ASGI_APPLICATION = "ChatAPI.asgi.application"
+
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            "hosts": [('127.0.0.1', 6379)],
+        },
+    },
+}
 
 
 TEMPLATES = [
@@ -146,7 +165,7 @@ WSGI_APPLICATION = 'Fixi_Backend.wsgi.application'
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")}
+DATABASES = {"default": env.db("DATABASE_URL")  }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation
