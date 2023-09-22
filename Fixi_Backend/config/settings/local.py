@@ -11,7 +11,7 @@ SECRET_KEY = env(
     default="D655WKCesUsmbHFYFeJnsPXwjT22qHBOTPCssoaK6K9rcLrJwOvyJ7Lf0c92DLvL",
 )
 # https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ["localhost", "0.0.0.0", "127.0.0.1",'192.168.1.41','192.168.1.78','192.168.1.18','10.121.49.158']
+ALLOWED_HOSTS = ['*']
 
 # CACHES
 # ------------------------------------------------------------------------------
@@ -26,12 +26,15 @@ CACHES = {
 # EMAIL
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-EMAIL_HOST = env("EMAIL_HOST", default="mailhog")
 # https://docs.djangoproject.com/en/dev/ref/settings/#email-port
-EMAIL_PORT = 1025
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True  # Use TLS (True for Gmail)
 
+EMAIL_HOST_USER = 'y.ibork1@gmail.com'  # Your email address
+EMAIL_HOST_PASSWORD = 'Hash9map'  # Your email password or app-specific password
 
 # django-debug-toolbar
 # ------------------------------------------------------------------------------

@@ -19,7 +19,6 @@ BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
 APPS_DIR = BASE_DIR / "Fixi_Backend"
 env = environ.Env()
 
-GDAL_LIBRARY_PATH = 'C:/Users/Yassine/Documents/gdal-3.7.1.tar/gdal-3.7.1'
 
 READ_DOT_ENV_FILE = env.bool("DJANGO_READ_DOT_ENV_FILE", default=False)
 if READ_DOT_ENV_FILE:
@@ -41,7 +40,7 @@ SECRET_KEY = 'z8q1(&_jk0zu#wc!$7#mkf6a$^3@69o87bf$b0-q#u3m%a30yq'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.1.41']
+ALLOWED_HOSTS = ['*']
 USE_X_FORWARDED_HOST = True
 
 # In settings.py
@@ -75,8 +74,6 @@ THIRD_PARTY_APPS = [
     'colorfield',
     'django_filters',
     "channels",
-    'django.contrib.gis',
-
 ]
 LOCAL_APPS =[
 "Fixi_Backend.Catalogue",
@@ -85,6 +82,7 @@ LOCAL_APPS =[
 "Fixi_Backend.basket",
 "Fixi_Backend.orders",
 "Fixi_Backend.reviews",
+"Fixi_Backend.chat",
 ]
 INSTALLED_APPS = DJANGO_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 SITE_ID = 1
@@ -98,6 +96,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'allauth.account.middleware.AccountMiddleware',
 ]
 
 ROOT_URLCONF = "config.urls"

@@ -25,5 +25,7 @@ urlpatterns = [
     path("service", include("Fixi_Backend.Catalogue.urls")),
     path("basket", include("Fixi_Backend.basket.urls")),
     path("users/", include("Fixi_Backend.users.urls", namespace="users")),
+    path('conversations/', include('Fixi_Backend.chat.urls'))  # new
+
 ]
 

@@ -1,35 +1,14 @@
 from rest_framework import serializers
-from .models import User, Address
+from .models import User
 from dj_rest_auth.registration.serializers import RegisterSerializer as RestAuthRegisterSerializer
 
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = [
-            'id',
-            'username',
-            'email',
-            'name',
-            'first_name',
-            'last_name',
-            'is_verified',
-            'verify_token',
-            'phone_number',
-            'wishlist',
-        ]
+        fields = ['username']
 
 
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = [
-            'id',
-            'address',
-            'city',
-            'is_primary',
-            'zip'
-        ]
 
 
 class RegisterSerializer(RestAuthRegisterSerializer):
