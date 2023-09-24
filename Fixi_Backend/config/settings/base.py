@@ -118,7 +118,11 @@ REST_AUTH = {
     'USE_JWT': True,
     "JWT_AUTH_HTTPONLY": False,
     'OLD_PASSWORD_FIELD_ENABLED': True,
+    'USER_DETAILS_SERIALIZER': 'Fixi_Backend.users.serializers.UserSerializer',
     #
+}
+AUTH_SERIALIZERS = {
+    'USER_DETAILS_SERIALIZER': 'Fixi_Backend.users.serializers.UserSerializer',
 }
 # https://docs.djangoproject.com/en/dev/ref/settings/#authentication-backends
 AUTHENTICATION_BACKENDS = [
@@ -126,6 +130,7 @@ AUTHENTICATION_BACKENDS = [
     "allauth.account.auth_backends.AuthenticationBackend",
 ]
 AUTH_USER_MODEL = "users.User"
+
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-redirect-url
 LOGIN_REDIRECT_URL = "users:redirect"
 # https://docs.djangoproject.com/en/dev/ref/settings/#login-url

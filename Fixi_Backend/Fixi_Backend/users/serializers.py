@@ -6,8 +6,7 @@ from dj_rest_auth.registration.serializers import RegisterSerializer as RestAuth
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        fields = ['username']
-
+        fields = ['username', 'first_name', 'last_name', 'email','role']
 
 
 
