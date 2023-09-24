@@ -1,8 +1,8 @@
 # PostgreSQL
 # ------------------------------------------------------------------------------
-POSTGRES_ENGINE=django.db.backends.postgis
-POSTGRES_HOST=postgres
-POSTGRES_PORT=5432
-POSTGRES_DB=Fixi
-POSTGRES_USER=sIFxdXmQSGtQqDyOTADlBjsignLaGvTB
-POSTGRES_PASSWORD=q8lxE8LunyVwnCafXo9cSlxUMI8qebGF7S5K9zJPxcltp9h79giab1SHmKVCvUeZ
+POSTGRES_ENGINE=django.db.backends.postgresql
+POSTGRES_HOST=containers-us-west-171.railway.app
+POSTGRES_PORT=6050
+POSTGRES_DB=railway
+POSTGRES_USER=postgres
+POSTGRES_PASSWORD=YFkFwOGBOaY8Z18vCOO0

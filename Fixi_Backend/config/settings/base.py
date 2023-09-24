@@ -164,7 +164,16 @@ WSGI_APPLICATION = 'Fixi_Backend.wsgi.application'
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
-DATABASES = {"default": env.db("DATABASE_URL")  }
+DATABASES ={
+    "default": {
+        'ENGINE': "django.db.backends.postgresql",
+        'NAME': "railway",
+        'USER': "postgres",
+        'PASSWORD': "YFkFwOGBOaY8Z18vCOO0",
+        'HOST': "containers-us-west-171.railway.app",
+        'PORT': "6050",
+    }
+}
 DATABASES["default"]["ATOMIC_REQUESTS"] = True
 
 # Password validation
