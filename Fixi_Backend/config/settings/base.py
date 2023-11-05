@@ -108,18 +108,41 @@ REST_FRAMEWORK = {
         "rest_framework.permissions.AllowAny",
     ],
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        # "rest_framework.authentication.TokenAuthentication",
         'rest_framework_simplejwt.authentication.JWTAuthentication',
     ],
-    # 'DEFAULT_PAGINATION_CLASS': 'yanvision_shop.utils.CustomPageNumberPagination',
 }
+
+# settings.py
+
+from datetime import timedelta
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=60),  # Adjust the lifetime as needed
+    "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_LIFETIME": timedelta(days=1),
+    "SLIDING_TOKEN_REFRESH_LIFETIME_ALTERNATIVE": timedelta(days=30),
+    "SLIDING_TOKEN_LIFETIME_ALTERNATIVE": timedelta(days=30),
+    "ALGORITHM": "HS256",
+    "SIGNING_KEY": SECRET_KEY,
+    "VERIFYING_KEY": None,
+    "AUTH_HEADER_TYPES": ("Bearer",),
+    'AUTH_TOKEN_CLASSES': (
+        'Fixi_Backend.users.serializers.CustomTokenSerializer',  # Use the custom token serializer
+    ),
+    "PAYLOAD_HANDLER": "config.utils.custom_payload_handler",
+    "TOKEN_OBTAIN_SERIALIZER": "Fixi_Backend.users.serializers.CustomTokenObtainPairSerializer",
+
+}
+
 REST_AUTH = {
     'USE_JWT': True,
     "JWT_AUTH_HTTPONLY": False,
     'OLD_PASSWORD_FIELD_ENABLED': True,
     'USER_DETAILS_SERIALIZER': 'Fixi_Backend.users.serializers.UserSerializer',
-    #
+    'SERIALIZERS': {
+        'JWT_SERIALIZER': 'Fixi_Backend.users.serializers.CustomTokenAuthentication',  # Use the custom access token serializer
+    },
+
 }
 AUTH_SERIALIZERS = {
     'USER_DETAILS_SERIALIZER': 'Fixi_Backend.users.serializers.UserSerializer',
@@ -172,11 +195,11 @@ WSGI_APPLICATION = 'Fixi_Backend.wsgi.application'
 DATABASES ={
     "default": {
         'ENGINE': "django.db.backends.postgresql",
-        'NAME': "railway",
+        'NAME': "Fixi",
         'USER': "postgres",
-        'PASSWORD': "YFkFwOGBOaY8Z18vCOO0",
-        'HOST': "containers-us-west-171.railway.app",
-        'PORT': "6050",
+        'PASSWORD': "password",
+        'HOST': "localhost",
+        'PORT': "5432",
     }
 }
 DATABASES["default"]["ATOMIC_REQUESTS"] = True

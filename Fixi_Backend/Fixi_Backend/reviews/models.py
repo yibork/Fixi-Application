@@ -49,7 +49,7 @@ class Review(AbstractBaseModel):
     def get_tags(self):
         return self.tags.all()
     def __str__(self):
-        return f"{self.stars} on {self.service.name}"
+        return f"{self.stars} on {self.title}"
 
     @property
     def get_media(self):

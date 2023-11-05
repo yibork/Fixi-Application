@@ -4,6 +4,8 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 from django.urls import re_path
 from django.views import defaults as default_views
 from django.contrib import admin
+from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
+
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
@@ -14,21 +16,19 @@ from rest_framework_simplejwt.views import (
 from django.urls import include, path
 from pictures.conf import get_settings
 
-
 urlpatterns = [
-        path('admin/', admin.site.urls),
+        path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+        path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),         path('admin/', admin.site.urls),
         path('auth/', include('dj_rest_auth.urls')),
         path('auth/registration/', include('dj_rest_auth.registration.urls')),
-
-                  path('api/v1/', include('Fixi_Backend.urls')),
+        path('api/v1/', include('Fixi_Backend.urls')),
     path("api/v1/", include("config.api_router"), name="api"),
     path("users/", include("Fixi_Backend.users.urls", namespace="users")),
     path(settings.DJANGO_ADMIN_URL, admin.site.urls),
     path('accounts/', include('allauth.urls')),
-                  path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-                  path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 if settings.DEBUG:
     # Static file serving when using Gunicorn + Uvicorn for local web socket development
     urlpatterns += staticfiles_urlpatterns()

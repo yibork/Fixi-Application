@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from Fixi_Backend.reviews.models import *
+from Fixi_Backend.users.serializers import UserSerializer
 # from . import UserSerializer
 
 
@@ -35,7 +36,7 @@ class ReviewReportSerializer(serializers.ModelSerializer):
 
 
 class ReviewSerializer(serializers.ModelSerializer):
-    # user = UserSerializer(read_only=True)
+    user = UserSerializer(read_only=True)
     # media = MediaReviewSerializer(source="reviewmedia_set", many=True)
 
     class Meta:
@@ -46,7 +47,6 @@ class ReviewSerializer(serializers.ModelSerializer):
             'title',
             'message',
             'user',
-            'service',
             'votes',
             'category'
         )
