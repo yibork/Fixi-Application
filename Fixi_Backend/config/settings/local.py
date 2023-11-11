@@ -1,50 +1,41 @@
-from .base import *  # noqa
-from .base import env
+import os
 
+import environ
+from pathlib import Path
+from django.core.management.utils import get_random_secret_key
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = Path(__file__).resolve(strict=True).parent.parent.parent
+APPS_DIR = BASE_DIR / "Fixi_Backend"
+env = environ.Env()
 # GENERAL
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#debug
-DEBUG = True
-# https://docs.djangoproject.com/en/dev/ref/settings/#secret-key
-SECRET_KEY = env(
-    "DJANGO_SECRET_KEY",
-    default="D655WKCesUsmbHFYFeJnsPXwjT22qHBOTPCssoaK6K9rcLrJwOvyJ7Lf0c92DLvL",
-)
-# https://docs.djangoproject.com/en/dev/ref/settings/#allowed-hosts
-ALLOWED_HOSTS = ['*']
+DEBUG = env.bool("DJANGO_DEBUG", default=False)
 
-# CACHES
+SECRET_KEY = get_random_secret_key()
+ALLOWED_HOSTS = env.list("DJANGO_ALLOWED_HOSTS", default=['*'])
+
+# CACHES (Consider using a more persistent cache backend like Redis or Memcached in production)
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#caches
 CACHES = {
     "default": {
-        "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
-        "LOCATION": "",
+        "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",
+        "LOCATION": os.path.join(BASE_DIR, 'cache'),  # Define a dedicated cache directory
     }
 }
 
 # EMAIL
 # ------------------------------------------------------------------------------
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-host
-# https://docs.djangoproject.com/en/dev/ref/settings/#email-port
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = env('EMAIL_HOST', default='smtp.yourmailprovider.com')
+EMAIL_USE_TLS = env.bool('EMAIL_USE_TLS', default=True)
+EMAIL_PORT = env.int('EMAIL_PORT', default=587)
+EMAIL_HOST_USER = env('EMAIL_HOST_USER', default='your-email@example.com')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True  # Use TLS (True for Gmail)
 
-EMAIL_HOST_USER = 'y.ibork1@gmail.com'  # Your email address
-EMAIL_HOST_PASSWORD = 'Hash9map'  # Your email password or app-specific password
-
-# django-debug-toolbar
-# ------------------------------------------------------------------------------
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#middleware
-# https://django-debug-toolbar.readthedocs.io/en/latest/installation.html#internal-ips
-INTERNAL_IPS = ["127.0.0.1", "10.0.2.2"]
 # Celery
 # ------------------------------------------------------------------------------
-
-# https://docs.celeryq.dev/en/stable/userguide/configuration.html#task-eager-propagates
-CELERY_TASK_EAGER_PROPAGATES = True
-# Your stuff...
-# ------------------------------------------------------------------------------
+CELERY_TASK_EAGER_PROPAGATES = False  # Set to False in production to allow asynchronous task execution
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://localhost:6379/0")  # Adjust as needed
