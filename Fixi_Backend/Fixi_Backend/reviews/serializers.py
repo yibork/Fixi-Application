@@ -13,13 +13,7 @@ class MediaReviewSerializer(serializers.ModelSerializer):
 class ReviewReportSerializer(serializers.ModelSerializer):
     class Meta:
         model = ReviewReport
-        fields= [
-            'user',
-            'review',
-            'reason',
-            'reason_other',
-            'message'
-        ]
+        fields= '__all__'
 
     def validate(self, attrs):
         if attrs['reason'].is_other:

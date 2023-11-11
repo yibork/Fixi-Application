@@ -188,7 +188,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'Fixi_Backend.wsgi.application'
 
-
+MEDIA_URL="/media/"
+MEDIA_ROOT=os.path.join(BASE_DIR,"media")
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
@@ -255,6 +256,7 @@ ACCOUNT_EMAIL_VERIFICATION = "optional"
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_URL = '/static/'
+
 SOCIALACCOUNT_PROVIDERS = {
     'facebook': {
         'APP': {
