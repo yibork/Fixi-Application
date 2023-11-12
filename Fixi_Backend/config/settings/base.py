@@ -189,7 +189,8 @@ TEMPLATES = [
 WSGI_APPLICATION = 'Fixi_Backend.wsgi.application'
 
 MEDIA_URL="/media/"
-MEDIA_ROOT=os.path.join(BASE_DIR,"media")
+MEDIA_ROOT=os.path.join(BASE_DIR, "media")
+
 # DATABASES
 # ------------------------------------------------------------------------------
 # https://docs.djangoproject.com/en/dev/ref/settings/#databases
