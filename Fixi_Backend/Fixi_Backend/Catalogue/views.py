@@ -5,10 +5,10 @@ from django.db.models import Q
 
 class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
-
     def get_queryset(self):
         # Return the desired queryset here
         return Service.objects.all()
+
 
 class TaxonomyViewSet(ModelViewSet):
     serializer_class = TaxonomySerializer

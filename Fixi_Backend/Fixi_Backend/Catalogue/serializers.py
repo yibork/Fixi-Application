@@ -8,7 +8,7 @@ class ServiceSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Service
-        fields = ['id', 'name', 'description', 'price', 'image', 'created_by', 'slug', 'parent_taxonomies']
+        fields = '__all__'
 
     def get_parent_taxonomies(self, obj):
         service_taxonomies = ServiceTaxonomy.objects.filter(service=obj)
@@ -36,6 +36,7 @@ class ServiceSerializer(serializers.ModelSerializer):
             parent_taxonomies.append(taxonomy)
             taxonomy = taxonomy.get_parent()
         return parent_taxonomies
+
 
 class TaxonomySerializer(serializers.ModelSerializer):
     parent = serializers.SerializerMethodField()
