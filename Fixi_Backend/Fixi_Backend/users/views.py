@@ -9,7 +9,10 @@ from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
 from .models import User
 from rest_framework.decorators import api_view
-
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status
+from rest_framework import permissions
 import jwt, datetime
 
 class GoogleLoginApiView(SocialLoginView):
@@ -67,3 +70,38 @@ def user_list(request, ):
     users = User.objects.all().order_by('username')
     serializer = UserSerializer(instance=users, many=True)
     return Response(serializer.data)
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['first_name'] = user.first_name
+        token['last_name'] = user.last_name
+        token['email'] = user.email
+        token['id'] = user.id
+        token['phone_number'] = user.phone_number
+
+
+
+
+        # ...
+        return token
+class MyTokenObtainPairView(TokenObtainPairView):
+    serializer_class = MyTokenObtainPairSerializer
+class UserRegister(APIView):
+    permission_classes = (permissions.AllowAny,)
+    def post(self, request):
+        print(request.data)
+        serializer = UserSerializer(data=request.data)
+
+        if serializer.is_valid():
+            user = serializer.save()
+            if user:
+                return Response({"message":"User Created"}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
