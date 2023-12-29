@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.viewsets import ModelViewSet
 from django.contrib.auth import authenticate
 from rest_framework.permissions import IsAuthenticated
-from .serializers import  UserSerializer
+from .serializers import UserSerializer, ReviewSerializer, ServiceProviderSerializer
 from allauth.socialaccount.providers.google.views import GoogleOAuth2Adapter
 from allauth.socialaccount.providers.facebook.views import FacebookOAuth2Adapter
 from dj_rest_auth.registration.views import SocialLoginView
@@ -14,7 +14,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from rest_framework import permissions
 import jwt, datetime
-
+from .models import Review
 class GoogleLoginApiView(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
@@ -105,3 +105,12 @@ class UserRegister(APIView):
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+class ReviewView(ModelViewSet):
+    serializer_class = ReviewSerializer
+    queryset = Review.objects.all()
+
+class ServiceProviderListView(APIView):
+    def get(self, request, format=None):
+        service_providers = User.objects.filter(role=User.ServiceProvider)
+        serializer = ServiceProviderSerializer(service_providers, many=True)
+        return Response(serializer.data)

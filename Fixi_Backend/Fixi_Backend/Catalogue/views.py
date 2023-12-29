@@ -1,8 +1,7 @@
 from rest_framework.viewsets import ModelViewSet
-from .models import Service,Taxonomy
+from .models import Service,Taxonomy, FixiService
 from .serializers import ServiceSerializer,TaxonomySerializer
-from django.db.models import Q
-
+from .serializers import FixiServiceSerializer
 class ServiceViewSet(ModelViewSet):
     serializer_class = ServiceSerializer
     def get_queryset(self):
@@ -16,3 +15,10 @@ class TaxonomyViewSet(ModelViewSet):
     def get_queryset(self):
         # Return the desired queryset here
         return Taxonomy.objects.all()
+
+class FixiServiceViewSet(ModelViewSet):
+    serializer_class = FixiServiceSerializer
+    def get_queryset(self):
+        # Return the desired queryset here
+        return FixiService.objects.all()
+

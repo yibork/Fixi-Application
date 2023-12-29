@@ -48,3 +48,35 @@ class Taxonomy(MP_Node, AbstractBaseModel):
 class ServiceTaxonomy(AbstractBaseModel):
     taxonomy = models.ForeignKey('Taxonomy', on_delete=models.CASCADE)
     service = models.ForeignKey('Service', on_delete=models.CASCADE)
+
+class FixiService(AbstractBaseModel):
+    service = models.ForeignKey('Service', on_delete=models.CASCADE)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0.00)
+    client = models.ForeignKey('users.User', on_delete=models.CASCADE,null=True, blank=True,limit_choices_to={'role': 1})
+    service_provider = models.ForeignKey('users.User', on_delete=models.CASCADE,null=True, blank=True, related_name='service_provider',limit_choices_to={'role': 2})
+    time = models.DateTimeField(null=True, blank=True)
+    # Service Status Choices
+    PENDING = 'pending'
+    CONFIRMED = 'confirmed'
+    IN_PROGRESS = 'in_progress'
+    COMPLETED = 'completed'
+    CANCELLED = 'cancelled'
+
+    STATUS_CHOICES = [
+        (PENDING, 'Pending'),
+        (CONFIRMED, 'Confirmed'),
+        (IN_PROGRESS, 'In Progress'),
+        (COMPLETED, 'Completed'),
+        (CANCELLED, 'Cancelled'),
+    ]
+
+    status = models.CharField(
+        max_length=100,
+        choices=STATUS_CHOICES,
+        default=PENDING,
+        null=True,
+        blank=True
+    )
+
+    def __str__(self):
+        return self.service.name

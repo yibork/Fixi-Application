@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Service, Taxonomy, ServiceTaxonomy
+from .models import Service, Taxonomy, ServiceTaxonomy, FixiService
 
 from rest_framework import serializers
 
@@ -56,3 +56,8 @@ class TaxonomySerializer(serializers.ModelSerializer):
             serializer = TaxonomySerializer(parent)  # Serialize the parent using the same serializer
             return serializer.data
         return None
+
+class FixiServiceSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FixiService
+        fields = '__all__'

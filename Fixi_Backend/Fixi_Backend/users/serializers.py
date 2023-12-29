@@ -2,7 +2,7 @@ from rest_framework import serializers
 from .models import User
 from dj_rest_auth.registration.serializers import RegisterSerializer as RestAuthRegisterSerializer
 from rest_framework.authtoken.models import Token
-
+from .models import Review
 from rest_framework.authentication import TokenAuthentication
 
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -84,3 +84,26 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(validated_data['password'])
         user.save()
         return user
+
+class ReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Review
+        fields = '__all__'
+
+
+class ServiceProviderSerializer(serializers.ModelSerializer):
+    average_rating = serializers.SerializerMethodField()
+    reviews = ReviewSerializer(many=True, read_only=True)
+    taxonomy = serializers.SerializerMethodField()
+    class Meta:
+        model = User
+        fields = ['id', 'taxonomy','username', 'first_name', 'last_name', 'picture', 'average_rating', 'reviews']
+
+    def get_taxonomy(self, obj):
+        return obj.taxonomy.name
+    def get_average_rating(self, obj):
+        reviews = obj.reviews.all()
+        if reviews:
+            total_rating = sum([review.rating for review in reviews])
+            return total_rating / len(reviews)
+        return 0

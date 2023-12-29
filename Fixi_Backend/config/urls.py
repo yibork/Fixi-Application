@@ -17,6 +17,7 @@ from django.urls import include, path
 from pictures.conf import get_settings
 
 urlpatterns = [
+
         path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
         path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),         path('admin/', admin.site.urls),
         path('auth/', include('dj_rest_auth.urls')),
