@@ -4,6 +4,7 @@ from django.db import models
 from pictures.models import PictureField
 from django.conf import settings
 from django.core.validators import MaxValueValidator
+from django.contrib.gis.db import models as gis_models
 
 class User(AbstractUser):
     Client = 1
@@ -28,6 +29,8 @@ class User(AbstractUser):
         blank=True,
         related_name='service_providers'
     )
+    location = gis_models.PointField(geography=True, null=True, blank=True)
+
 
     def __str__(self):
         return self.username

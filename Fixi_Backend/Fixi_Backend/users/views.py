@@ -15,6 +15,9 @@ from rest_framework import status
 from rest_framework import permissions
 import jwt, datetime
 from .models import Review
+from .permissions import IsServiceProvider  # Custom permission class to check if the user is a service provider
+from django.contrib.gis.geos import Point
+
 class GoogleLoginApiView(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
 
@@ -113,4 +116,39 @@ class ServiceProviderListView(APIView):
     def get(self, request, format=None):
         service_providers = User.objects.filter(role=User.ServiceProvider)
         serializer = ServiceProviderSerializer(service_providers, many=True)
+        return Response(serializer.data)
+
+class UpdateLocationView(APIView):
+    permission_classes = [IsServiceProvider]
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        lat = request.data.get('latitude')
+        lon = request.data.get('longitude')
+
+        if lat is None or lon is None:
+            return Response({'error': 'Latitude and longitude are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user.location = Point(float(lon), float(lat), srid=4326)
+        user.save()
+        return Response({'status': 'Location updated successfully.'})
+
+from django.contrib.gis.measure import D
+from django.contrib.gis.db.models.functions import Distance
+
+class ServiceProviderSuggestionView(APIView):
+    def get(self, request, *args, **kwargs):
+        lat = request.query_params.get('latitude')
+        lon = request.query_params.get('longitude')
+
+        if lat is None or lon is None:
+            return Response({'error': 'Latitude and longitude are required.'}, status=status.HTTP_400_BAD_REQUEST)
+
+        user_location = Point(float(lon), float(lat), srid=4326)
+        nearby_service_providers = User.objects.filter(
+            location__distance_lte=(user_location, D(km=15))
+        ).annotate(distance=Distance('location', user_location)).order_by('distance')
+
+        # Serialize the data
+        serializer = ServiceProviderSerializer(nearby_service_providers, many=True)
         return Response(serializer.data)

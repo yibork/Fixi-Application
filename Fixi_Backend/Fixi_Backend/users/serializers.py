@@ -100,7 +100,9 @@ class ServiceProviderSerializer(serializers.ModelSerializer):
         fields = ['id', 'taxonomy','username', 'first_name', 'last_name', 'picture', 'average_rating', 'reviews']
 
     def get_taxonomy(self, obj):
-        return obj.taxonomy.name
+        if obj.taxonomy is not None:
+            return obj.taxonomy.name
+        return None  # Or a default value, like an empty string or a placeholder
     def get_average_rating(self, obj):
         reviews = obj.reviews.all()
         if reviews:

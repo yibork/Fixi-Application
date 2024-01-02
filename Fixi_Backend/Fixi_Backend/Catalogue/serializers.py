@@ -10,6 +10,7 @@ class ServiceSerializer(serializers.ModelSerializer):
         model = Service
         fields = '__all__'
 
+
     def get_parent_taxonomies(self, obj):
         service_taxonomies = ServiceTaxonomy.objects.filter(service=obj)
         parent_taxonomies = []

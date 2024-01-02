@@ -8,6 +8,7 @@ from .views import (
 user_list,
 LoginView
 )
+from .views import UpdateLocationView, ServiceProviderSuggestionView
 
 app_name = "users"
 router = routers.DefaultRouter()
@@ -21,6 +22,8 @@ urlpatterns = [
     path('login/', MyTokenObtainPairView.as_view(), name='login'),
     path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
     path('service-providers/', ServiceProviderListView.as_view(), name='service-providers'),
+    path('service-provider/update-location/', UpdateLocationView.as_view(), name='update-location'),
+    path('service-provider/nearby/', ServiceProviderSuggestionView.as_view(), name='nearby-service-providers'),
 
 ]
 urlpatterns += router.urls
