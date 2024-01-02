@@ -16,7 +16,6 @@ from rest_framework import permissions
 import jwt, datetime
 from .models import Review
 from .permissions import IsServiceProvider  # Custom permission class to check if the user is a service provider
-from django.contrib.gis.geos import Point
 
 class GoogleLoginApiView(SocialLoginView):
     adapter_class = GoogleOAuth2Adapter
@@ -129,25 +128,35 @@ class UpdateLocationView(APIView):
         if lat is None or lon is None:
             return Response({'error': 'Latitude and longitude are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user.location = Point(float(lon), float(lat), srid=4326)
+        user.latitude = float(lat)
+        user.longitude = float(lon)
         user.save()
         return Response({'status': 'Location updated successfully.'})
 
-from django.contrib.gis.measure import D
-from django.contrib.gis.db.models.functions import Distance
+import math
+
+def calculate_distance(lat1, lon1, lat2, lon2):
+    R = 6371  # Radius of the earth in km
+
+    dLat = math.radians(lat2 - lat1)
+    dLon = math.radians(lon2 - lon1)
+    a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2) * math.sin(dLon/2)
+    c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
+    distance = R * c  # Distance in km
+    return distance
 
 class ServiceProviderSuggestionView(APIView):
     def get(self, request, *args, **kwargs):
-        lat = request.query_params.get('latitude')
-        lon = request.query_params.get('longitude')
+        user_lat = request.query_params.get('latitude')
+        user_lon = request.query_params.get('longitude')
 
-        if lat is None or lon is None:
+        if user_lat is None or user_lon is None:
             return Response({'error': 'Latitude and longitude are required.'}, status=status.HTTP_400_BAD_REQUEST)
 
-        user_location = Point(float(lon), float(lat), srid=4326)
-        nearby_service_providers = User.objects.filter(
-            location__distance_lte=(user_location, D(km=15))
-        ).annotate(distance=Distance('location', user_location)).order_by('distance')
+        user_lat = float(user_lat)
+        user_lon = float(user_lon)
+        service_providers = User.objects.filter(role=User.ServiceProvider)
+        nearby_service_providers = [sp for sp in service_providers if calculate_distance(user_lat, user_lon, sp.latitude, sp.longitude) <= 15]
 
         # Serialize the data
         serializer = ServiceProviderSerializer(nearby_service_providers, many=True)

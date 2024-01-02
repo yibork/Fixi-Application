@@ -14,7 +14,6 @@ app_name = "users"
 router = routers.DefaultRouter()
 router.register('reviews', ReviewView, basename='Reviews')
 urlpatterns = [
-    path('', user_list, name='user_list'),
     path("refresh/",view = TokenRefreshView.as_view(), name="refresh"),
     path("token/",view = TokenObtainPairView.as_view(), name="token"),
     path("facebook/",view = FacebookLoginApiView.as_view(), name="facebook"),
