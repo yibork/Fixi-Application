@@ -156,7 +156,13 @@ class ServiceProviderSuggestionView(APIView):
         user_lat = float(user_lat)
         user_lon = float(user_lon)
         service_providers = User.objects.filter(role=User.ServiceProvider)
-        nearby_service_providers = [sp for sp in service_providers if calculate_distance(user_lat, user_lon, sp.latitude, sp.longitude) <= 15]
+
+        nearby_service_providers = []
+        for sp in service_providers:
+            if sp.latitude is not None and sp.longitude is not None:
+                distance = calculate_distance(user_lat, user_lon, sp.latitude, sp.longitude)
+                if distance <= 15:
+                    nearby_service_providers.append(sp)
 
         # Serialize the data
         serializer = ServiceProviderSerializer(nearby_service_providers, many=True)
