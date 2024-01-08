@@ -140,10 +140,15 @@ def calculate_distance(lat1, lon1, lat2, lon2):
 
     dLat = math.radians(lat2 - lat1)
     dLon = math.radians(lon2 - lon1)
-    a = math.sin(dLat/2) * math.sin(dLat/2) + math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) * math.sin(dLon/2) * math.sin(dLon/2)
+    a = (
+        math.sin(dLat/2) * math.sin(dLat/2) +
+        math.cos(math.radians(lat1)) * math.cos(math.radians(lat2)) *
+        math.sin(dLon/2) * math.sin(dLon/2)
+    )
     c = 2 * math.atan2(math.sqrt(a), math.sqrt(1-a))
-    distance = R * c  # Distance in km
-    return distance
+    distance_km = R * c  # Distance in km
+    distance_m = distance_km * 1000  # Convert distance to meters
+    return round(distance_m, 2)  # Round to two decimal places
 
 class ServiceProviderSuggestionView(APIView):
     def get(self, request, *args, **kwargs):
@@ -157,13 +162,14 @@ class ServiceProviderSuggestionView(APIView):
         user_lon = float(user_lon)
         service_providers = User.objects.filter(role=User.ServiceProvider)
 
-        nearby_service_providers = []
+        nearby_service_providers_with_distance = []
         for sp in service_providers:
             if sp.latitude is not None and sp.longitude is not None:
                 distance = calculate_distance(user_lat, user_lon, sp.latitude, sp.longitude)
-                if distance <= 15:
-                    nearby_service_providers.append(sp)
+                if distance <= 15000:
+                    # Append the service provider data and distance to the list
+                    sp_data = ServiceProviderSerializer(sp).data
+                    sp_data['distance'] = distance
+                    nearby_service_providers_with_distance.append(sp_data)
 
-        # Serialize the data
-        serializer = ServiceProviderSerializer(nearby_service_providers, many=True)
-        return Response(serializer.data)
+        return Response(nearby_service_providers_with_distance)
